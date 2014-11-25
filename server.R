@@ -1,3 +1,4 @@
+Sys.setlocale(category = "LC_ALL", locale = "hebrew")
 library(shiny)
 library(rgdal)
 library(akima) 
@@ -10,7 +11,10 @@ shinyServer(function(input, output,session) {
   userdata <- reactive(function(){
     if(is.null(input$bugs)){return()}
     if(input$need_proj=="text"){
-      bugs <- read.csv(input$bugs$datapath, header=FALSE, fileEncoding="iso-8859-8")
+	Sys.setlocale(category = "LC_ALL", locale = "hebrew")
+      bugs <- read.csv(input$bugs$datapath, header=FALSE, sep=",",fileEncoding="iso-8859-8", stringsAsFactors =F)
+	 bugs<-cbind(enc2utf8(as.vector(bugs[,1])),bugs[,2])
+     #bugs<-iconv(bugs,"iso-8859-8","UTF-8")
     }
     else
       bugs <- read.csv(input$bugs$datapath, header=FALSE)
@@ -43,7 +47,7 @@ shinyServer(function(input, output,session) {
       return(foo)
     }
     if(input$need_proj=="text"){
-      foo<-geocode(paste(data[,1], "ירושלים"))
+      foo<-geocode(data[,1])
       d<-cbind(foo,data[,2])
       names(d)<-c("V1", "V2","V3")
       d<-na.omit(d)

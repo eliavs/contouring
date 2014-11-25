@@ -1,3 +1,4 @@
+options(encoding = 'UTF-8')
 library(shiny)
 userdata <- list('Upload a file'=c(1))
 # Define UI for dataset viewer application
